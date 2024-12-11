@@ -1,13 +1,27 @@
-from flask import Flask, render_template, request
+from ecommercebot.data_converter import DataConverter
 from ecommercebot.data_ingestion import DataIngestion
 from ecommercebot.retrieval_generation import RetrievalGeneration
 
+
+
+
+data_dir = 'artifacts/flipkart_product_review.csv'
+columns = ['product_title', 'review']
+meta_data = 'product_name'
+page_content = 'review'
+doc_converter = DataConverter(data_dir=data_dir, meta_data=meta_data, page_content=page_content, columns=columns)
+documents = doc_converter.dataconverter()
+print(documents[:1])
+
+
 embedding_model = "BAAI/bge-small-en-v1.5"
 collection_name = "flipkart"
-exists_collection = True
-docs = None
+exists_collection = False
+docs = documents
 data_ingest = DataIngestion(embedding_model=embedding_model, collection_name=collection_name, exists_collection=exists_collection, docs = docs)
 vstore = data_ingest.data_ingestion()
+
+
 
 llm = "llama-3.1-70b-versatile"
 temp = 0.5
@@ -30,40 +44,27 @@ BOT_TEMPLATE = """
     """
 
 # {context} history aware retriever contain input and chat history
+
+
 session_id = "abc123"  # unique identifier for each user session.
 ret_gen = RetrievalGeneration(llm=llm, temp=temp, retriever_prompt=retriever_prompt, BOT_TEMPLATE=BOT_TEMPLATE, vstore=vstore, session_id=session_id)
+
 
 conversational_rag_chain = ret_gen.generation()
 
 
-app = Flask(__name__)
 
-
-@app.route("/")
-def index():
-    return render_template("chat.html")
-
-@app.route("/get", methods = ["POST", "GET"])
-def chat():
-   
-   if request.method == "POST":
-      msg = request.form["msg"]
-      input = msg
-
-      result = conversational_rag_chain.invoke(
-         {"input": input},
+answer= conversational_rag_chain.invoke(
+    {"input": "can you tell me the best bluetooth buds?"},
     config={
         "configurable": {"session_id": "abc123"}
-    },
+    },  # constructs a key "abc123" in `store`.
 )["answer"]
-
-      return str(result)
-
-
-
-
-
-
-if __name__ == '__main__':
-    
-    app.run(port=5000, debug= True)  #host="0.0.0.0"
+print(answer)
+answer1= conversational_rag_chain.invoke(
+{"input": "what is my previous question?"},
+config={
+    "configurable": {"session_id": "abc123"}
+},  # constructs a key "abc123" in `store`.
+)["answer"]
+print(answer1)
