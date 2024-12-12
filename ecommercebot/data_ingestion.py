@@ -6,11 +6,11 @@ load_dotenv()
 
 
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_API_KEY"] = os.environ["langchain_api_key"]
+os.environ["LANGCHAIN_API_KEY"] = os.environ["LANGCHAIN_API_KEY"]
 ASTRA_DB_API_ENDPOINT = os.environ["ASTRA_DB_API_ENDPOINT"]
 ASTRA_DB_APPLICATION_TOKEN = os.environ.get("ASTRA_DB_APPLICATION_TOKEN")
 ASTRA_DB_KEYSPACE = os.environ.get("ASTRA_DB_KEYSPACE")
-GROQ_API_KEY = os.environ['groqe_api_key']
+GROQ_API_KEY = os.environ['GROQE_API_KEY']
 HF_TOKEN = os.environ["HF_ACCESS_TOKEN"]
 
 
