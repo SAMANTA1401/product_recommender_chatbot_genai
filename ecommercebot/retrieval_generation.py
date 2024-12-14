@@ -17,7 +17,7 @@ from dotenv import load_dotenv
 import os
 load_dotenv()
 
-os.environ["GROQ_API_KEY"]= os.getenv("GROQE_API_KEY")
+os.environ["GROQ_API_KEY"]= os.getenv("GROQ_API_KEY")
 
 class RetrievalGeneration():
     def __init__(self, llm, temp,retriever_prompt,BOT_TEMPLATE,vstore,session_id:str):
