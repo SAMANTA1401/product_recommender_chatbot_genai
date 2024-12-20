@@ -2,6 +2,8 @@ from flask import Flask, render_template, request
 from ecommercebot.data_ingestion import DataIngestion
 from ecommercebot.retrieval_generation import RetrievalGeneration
 
+
+
 embedding_model = "BAAI/bge-small-en-v1.5"
 collection_name = "flipkart"
 exists_collection = True
@@ -61,10 +63,12 @@ def chat():
 
 
 
+def run_app():
+    app.run(debug=True)
 
-
+# run_app = run_app()
 
 
 if __name__ == '__main__':
     
-    app.run(host="0.0.0.0",port=5000, debug= True)  #host="0.0.0.0"
+    app.run(host="0.0.0.0",port=5000,debug= True)  # host="0.0.0.0",port=5000,
